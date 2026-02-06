@@ -15,18 +15,25 @@ class Turn:
     def step(self):
         self.counter += 1
 
-        if self.counter >= self.delay:
-            self.counter = 0
+        if self.counter < self.delay:
+            return True
 
-            if self.piece_should_stop(self.piece):
-                self.place_piece(self.piece)
-                self.board.step()
-                self.piece = Piece(random.choice(SHAPES))
+        self.counter = 0
 
-            self.piece.y += 1
+        if self.piece_should_stop():
+            self.place_piece(self.piece)
+            self.board.step()
+            self.piece = Piece(random.choice(SHAPES))
 
-    def piece_should_stop(self, piece: Piece) -> bool:
-        for x, y in piece.tiles():
+            if self.piece_should_stop():
+                return False
+
+        self.piece.y += 1
+
+        return True
+
+    def piece_should_stop(self) -> bool:
+        for x, y in self.piece.tiles():
             if y >= Y_TILES - 1:
                 return True
 

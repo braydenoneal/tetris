@@ -23,7 +23,10 @@ class Game:
                 self.ui.handle_input(event)
 
             self.ui.render()
-            self.turn.step()
+
+            if not self.turn.step():
+                self.running = False
+
             self.clock.tick(60)
 
         pygame.quit()
