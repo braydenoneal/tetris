@@ -22,6 +22,7 @@ class Game:
 
                 self.ui.handle_input(event)
 
+            self.ui.handle_keys()
             self.ui.render()
 
             if not self.turn.step():

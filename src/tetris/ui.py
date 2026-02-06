@@ -13,24 +13,41 @@ class UI:
         self.screen: Surface = screen
         self.board: Board = board
         self.turn = turn
+        self.left_counter = 0
+        self.right_counter = 0
 
-    def handle_input(self, event: Event):
+    def handle_keys(self):
         keys = pygame.key.get_pressed()
 
         self.turn.delay = 2 if keys[pygame.K_DOWN] else 10
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+        if keys[pygame.K_LEFT]:
+            self.left_counter += 1
+
+            if self.left_counter >= 5:
+                self.left_counter = 0
                 self.turn.piece.move_left()
 
                 if not self.board.is_valid_piece(self.turn.piece):
                     self.turn.piece.move_right()
-            elif event.key == pygame.K_RIGHT:
+        else:
+            self.left_counter = 0
+
+        if keys[pygame.K_RIGHT]:
+            self.right_counter += 1
+
+            if self.right_counter >= 5:
+                self.right_counter = 0
                 self.turn.piece.move_right()
 
                 if not self.board.is_valid_piece(self.turn.piece):
                     self.turn.piece.move_left()
-            elif event.key == pygame.K_UP:
+        else:
+            self.right_counter = 0
+
+    def handle_input(self, event: Event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
                 self.turn.piece.rotate_cw()
 
                 if not self.board.is_valid_piece(self.turn.piece):
