@@ -15,7 +15,26 @@ class UI:
         self.turn = turn
 
     def handle_input(self, event: Event):
-        pass
+        keys = pygame.key.get_pressed()
+
+        self.turn.delay = 2 if keys[pygame.K_DOWN] else 10
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.turn.piece.move_left()
+
+                if not self.board.is_valid_piece(self.turn.piece):
+                    self.turn.piece.move_right()
+            elif event.key == pygame.K_RIGHT:
+                self.turn.piece.move_right()
+
+                if not self.board.is_valid_piece(self.turn.piece):
+                    self.turn.piece.move_left()
+            elif event.key == pygame.K_UP:
+                self.turn.piece.rotate_cw()
+
+                if not self.board.is_valid_piece(self.turn.piece):
+                    self.turn.piece.rotate_ccw()
 
     def render(self):
         self.screen.fill(BACKGROUND_COLOR)
