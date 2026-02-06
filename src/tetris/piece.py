@@ -1,18 +1,13 @@
-from dataclasses import dataclass
+from board import X_TILES
+from shape import Shape
 
 
-@dataclass
 class Piece:
-    color: tuple[int, int, int]
-    shape: list[tuple[int, int]]
+    def __init__(self, shape: Shape):
+        self.shape = shape
+        self.x = X_TILES // 2
+        self.y = 0
+        self.rotation = 0  # 1-3
 
-
-PIECES: list[Piece] = [
-    Piece((0x00, 0xFF, 0xFF), [(0, 0), (1, 0), (2, 0), (3, 0)]),
-    Piece((0xFF, 0xFF, 0x00), [(0, 0), (1, 0), (0, 1), (1, 1)]),
-    Piece((0xFF, 0x00, 0xFF), [(0, 0), (1, 0), (2, 0), (1, 1)]),
-    Piece((0x00, 0x00, 0xFF), [(1, 0), (1, 1), (0, 2), (1, 2)]),
-    Piece((0xFF, 0x7F, 0x00), [(0, 0), (0, 1), (0, 2), (1, 2)]),
-    Piece((0x00, 0xFF, 0x00), [(1, 0), (2, 0), (0, 1), (1, 1)]),
-    Piece((0xFF, 0x00, 0x00), [(0, 0), (1, 0), (1, 1), (2, 1)]),
-]
+    def tiles(self):
+        return [(x + self.x, y + self.y) for x, y, in self.shape.tiles]
