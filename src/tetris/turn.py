@@ -11,6 +11,7 @@ class Turn:
         self.piece = Piece(random.choice(SHAPES))
         self.counter = 0
         self.delay = 10
+        self.stop_delay = False
 
     def step(self):
         self.counter += 1
@@ -21,6 +22,12 @@ class Turn:
         self.counter = 0
 
         if self.piece_should_stop():
+            if not self.stop_delay:
+                self.stop_delay = True
+                return True
+            else:
+                self.stop_delay = False
+
             self.place_piece(self.piece)
             self.board.step()
             self.piece = Piece(random.choice(SHAPES))
