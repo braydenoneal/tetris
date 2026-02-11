@@ -13,6 +13,8 @@ class UI:
         self.screen: Surface = screen
         self.board: Board = board
         self.turn = turn
+        self.first_shift_delay = 10
+        self.repeat_shift_delay = 5
         self.left_counter = 0
         self.right_counter = 0
 
@@ -21,27 +23,32 @@ class UI:
 
         self.turn.delay = 2 if keys[pygame.K_DOWN] else 10
 
-        if keys[pygame.K_LEFT]:
-            self.left_counter += 1
+        f = self.first_shift_delay
+        r = self.repeat_shift_delay
 
-            if self.left_counter >= 5:
-                self.left_counter = 0
+        if keys[pygame.K_LEFT]:
+            c = self.left_counter
+
+            if c == 0 or (c >= f and (c - f) % r == 0):
                 self.turn.piece.move_left()
 
                 if not self.board.is_valid_piece(self.turn.piece):
                     self.turn.piece.move_right()
+
+            self.left_counter += 1
         else:
             self.left_counter = 0
 
         if keys[pygame.K_RIGHT]:
-            self.right_counter += 1
+            c = self.right_counter
 
-            if self.right_counter >= 5:
-                self.right_counter = 0
+            if c == 0 or (c >= f and (c - f) % r == 0):
                 self.turn.piece.move_right()
 
                 if not self.board.is_valid_piece(self.turn.piece):
                     self.turn.piece.move_left()
+
+            self.right_counter += 1
         else:
             self.right_counter = 0
 
