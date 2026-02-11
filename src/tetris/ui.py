@@ -5,7 +5,7 @@ from board import Board, X_TILES, Y_TILES, BOARD_COLOR, BOARD_BORDER_COLOR
 from turn import Turn
 
 TILE_SIZE = 20
-BACKGROUND_COLOR = (0x22, 0x22, 0x22)
+BACKGROUND_COLOR = 0x222222
 
 
 class UI:

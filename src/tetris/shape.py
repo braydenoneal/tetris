@@ -3,16 +3,16 @@ from dataclasses import dataclass
 
 @dataclass
 class Shape:
-    color: tuple[int, int, int]
+    color: int
     tiles: list[tuple[int, int]]
 
 
 SHAPES: list[Shape] = [
-    Shape((0x00, 0xFF, 0xFF), [(0, 0), (1, 0), (2, 0), (3, 0)]),
-    Shape((0xFF, 0xFF, 0x00), [(0, 0), (1, 0), (0, 1), (1, 1)]),
-    Shape((0xFF, 0x00, 0xFF), [(0, 0), (1, 0), (2, 0), (1, 1)]),
-    Shape((0x00, 0x00, 0xFF), [(1, 0), (1, 1), (0, 2), (1, 2)]),
-    Shape((0xFF, 0x7F, 0x00), [(0, 0), (0, 1), (0, 2), (1, 2)]),
-    Shape((0x00, 0xFF, 0x00), [(1, 0), (2, 0), (0, 1), (1, 1)]),
-    Shape((0xFF, 0x00, 0x00), [(0, 0), (1, 0), (1, 1), (2, 1)]),
+    Shape(0x00FFFF, [(0, 0), (1, 0), (2, 0), (3, 0)]),  # Cyan I
+    Shape(0xFFFF00, [(0, 0), (1, 0), (0, 1), (1, 1)]),  # Yellow O
+    Shape(0xFF00FF, [(0, 0), (1, 0), (2, 0), (1, 1)]),  # Purple T
+    Shape(0x00FF00, [(1, 0), (2, 0), (0, 1), (1, 1)]),  # Green S
+    Shape(0xFF0000, [(0, 0), (1, 0), (1, 1), (2, 1)]),  # Red Z
+    Shape(0x0000FF, [(0, 0), (1, 0), (2, 0), (2, 1)]),  # Blue J
+    Shape(0xFF7F00, [(0, 0), (1, 0), (2, 0), (0, 1)]),  # Orange L
 ]
