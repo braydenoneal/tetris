@@ -1,11 +1,13 @@
+import math
+
 import board
-from shape import Shape
+from shape import Shape, shape_width
 
 
 class Piece:
     def __init__(self, shape: Shape):
         self.shape = shape
-        self.x = board.X_TILES // 2
+        self.x = board.X_TILES // 2 - math.ceil(shape_width(shape) / 2)
         self.y = 0
         self.rotations = 0  # 1-3
 
