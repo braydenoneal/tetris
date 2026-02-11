@@ -8,7 +8,8 @@ from shape import SHAPES
 class Turn:
     def __init__(self, board: Board):
         self.board = board
-        self.piece = Piece(random.choice(SHAPES))
+        self.random = RandomPieceGenerator()
+        self.piece = self.random.next_piece()
         self.counter = 0
         self.delay = 10
         self.stop_delay = False
@@ -30,7 +31,7 @@ class Turn:
 
             self.place_piece(self.piece)
             self.board.step()
-            self.piece = Piece(random.choice(SHAPES))
+            self.piece = self.random.next_piece()
 
             if self.piece_should_stop():
                 return False
@@ -45,7 +46,7 @@ class Turn:
 
         self.place_piece(self.piece)
         self.board.step()
-        self.piece = Piece(random.choice(SHAPES))
+        self.piece = self.random.next_piece()
 
     def piece_should_stop(self) -> bool:
         for x, y in self.piece.tiles():
@@ -60,3 +61,20 @@ class Turn:
     def place_piece(self, piece: Piece):
         for x, y in piece.tiles():
             self.board.grid[x][y] = piece.shape
+
+
+class RandomPieceGenerator:
+    def __init__(self):
+        self.index = 0
+        self.shapes = SHAPES.copy()
+        random.shuffle(self.shapes)
+
+    def next_piece(self) -> Piece:
+        piece = Piece(self.shapes[self.index])
+        self.index += 1
+
+        if self.index >= len(self.shapes):
+            self.index = 0
+            random.shuffle(self.shapes)
+
+        return piece
