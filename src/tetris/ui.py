@@ -65,6 +65,7 @@ class UI:
     def render(self):
         self.screen.fill(BACKGROUND_COLOR)
         self._render_board()
+        self._render_ghost_piece()
         self._render_piece()
         pygame.display.flip()
 
@@ -101,4 +102,15 @@ class UI:
             y_start = board_y_start + y * TILE_SIZE
 
             pygame.draw.rect(self.screen, self.turn.piece.shape.color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
+            pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
+
+    def _render_ghost_piece(self):
+        piece = self.turn.get_ghost()
+        board_x_start, board_y_start = self._get_board_start()
+
+        for x, y in piece.tiles():
+            x_start = board_x_start + x * TILE_SIZE
+            y_start = board_y_start + y * TILE_SIZE
+
+            pygame.draw.rect(self.screen, piece.shape.ghost_color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
             pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)

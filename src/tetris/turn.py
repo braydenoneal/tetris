@@ -27,18 +27,18 @@ class Turn:
 
         self.counter = 0
 
-        if self.piece_should_stop():
+        if self.piece_should_stop(self.piece):
             if not self.stop_delay:
                 self.stop_delay = True
                 return True
             else:
                 self.stop_delay = False
 
-            self.place_piece(self.piece)
+            self.place_piece()
             self.board.step()
             self.piece = self.random.next_piece()
 
-            if self.piece_should_stop():
+            if self.piece_should_stop(self.piece):
                 return False
 
         self.piece.y += 1
@@ -46,15 +46,15 @@ class Turn:
         return True
 
     def place_now(self):
-        while not self.piece_should_stop():
+        while not self.piece_should_stop(self.piece):
             self.piece.y += 1
 
-        self.place_piece(self.piece)
+        self.place_piece()
         self.board.step()
         self.piece = self.random.next_piece()
 
-    def piece_should_stop(self) -> bool:
-        for x, y in self.piece.tiles():
+    def piece_should_stop(self, piece: Piece) -> bool:
+        for x, y in piece.tiles():
             if y >= Y_TILES - 1:
                 return True
 
@@ -63,9 +63,20 @@ class Turn:
 
         return False
 
-    def place_piece(self, piece: Piece):
-        for x, y in piece.tiles():
-            self.board.grid[x][y] = piece.shape
+    def place_piece(self):
+        for x, y in self.piece.tiles():
+            self.board.grid[x][y] = self.piece.shape
+
+    def get_ghost(self) -> Piece:
+        piece = Piece(self.piece.shape)
+        piece.x = self.piece.x
+        piece.y = self.piece.y
+        piece.rotations = self.piece.rotations
+
+        while not self.piece_should_stop(piece):
+            piece.y += 1
+
+        return piece
 
 
 class RandomPieceGenerator:
