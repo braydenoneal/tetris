@@ -10,6 +10,11 @@ class Turn:
         self.board = board
         self.random = RandomPieceGenerator()
         self.piece = self.random.next_piece()
+
+        while self.piece.shape.name == "S" or self.piece.shape.name == "Z":
+            self.random = RandomPieceGenerator()
+            self.piece = self.random.next_piece()
+
         self.counter = 0
         self.delay = 10
         self.stop_delay = False
