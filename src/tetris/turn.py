@@ -39,6 +39,14 @@ class Turn:
 
         return True
 
+    def place_now(self):
+        while not self.piece_should_stop():
+            self.piece.y += 1
+
+        self.place_piece(self.piece)
+        self.board.step()
+        self.piece = Piece(random.choice(SHAPES))
+
     def piece_should_stop(self) -> bool:
         for x, y in self.piece.tiles():
             if y >= Y_TILES - 1:

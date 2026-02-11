@@ -52,6 +52,8 @@ class UI:
 
                 if not self.board.is_valid_piece(self.turn.piece):
                     self.turn.piece.rotate_ccw()
+            elif event.key == pygame.K_SPACE:
+                self.turn.place_now()
 
     def render(self):
         self.screen.fill(BACKGROUND_COLOR)
