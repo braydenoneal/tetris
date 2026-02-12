@@ -118,12 +118,12 @@ class UI:
 
     def _render_piece_preview(self):
         for index, shape in enumerate(self.turn.random.get_preview()):
-            tiles = [(x - 5, y + index * 4) for x, y in shape.tiles]
+            tiles = [(x + X_TILES + 1, y + index * 4) for x, y in shape.tiles]
             self._render_tiles(tiles, shape.color)
 
     def _render_hold_piece(self):
         piece = self.turn.hold_piece
 
         if piece:
-            tiles = [(x + X_TILES + 1, y) for x, y in piece.shape.tiles]
+            tiles = [(x - 5, y) for x, y in piece.shape.tiles]
             self._render_tiles(tiles, piece.shape.color)
