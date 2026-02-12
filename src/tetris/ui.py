@@ -98,7 +98,7 @@ class UI:
                 pygame.draw.rect(self.screen, shape.color if shape else BOARD_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE))
                 pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
 
-    def _render_tiles(self, tiles: list[tuple[int, int]], color: int):
+    def _render_tiles(self, tiles: list[tuple[int, int]], color: int, border_color=BOARD_BORDER_COLOR, thickness=1):
         board_x_start, board_y_start = self._get_board_start()
 
         for x, y in tiles:
@@ -106,7 +106,7 @@ class UI:
             y_start = board_y_start + y * TILE_SIZE
 
             pygame.draw.rect(self.screen, color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
-            pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
+            pygame.draw.rect(self.screen, border_color, (x_start, y_start, TILE_SIZE, TILE_SIZE), thickness)
 
     def _render_piece(self):
         piece = self.turn.piece
@@ -114,7 +114,7 @@ class UI:
 
     def _render_ghost_piece(self):
         piece = self.turn.get_ghost()
-        self._render_tiles(piece.tiles(), piece.shape.ghost_color)
+        self._render_tiles(piece.tiles(), BOARD_COLOR, piece.shape.color, 2)
 
     def _render_piece_preview(self):
         for index, shape in enumerate(self.turn.random.get_preview()):
