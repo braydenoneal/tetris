@@ -13,8 +13,8 @@ class UI:
         self.screen: Surface = screen
         self.board: Board = board
         self.turn = turn
-        self.first_shift_delay = 10
-        self.repeat_shift_delay = 5
+        self.first_shift_delay = 12
+        self.repeat_shift_delay = 3
         self.left_counter = 0
         self.right_counter = 0
 
