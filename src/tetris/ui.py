@@ -67,6 +67,7 @@ class UI:
         self._render_board()
         self._render_ghost_piece()
         self._render_piece()
+        self._render_piece_preview()
         pygame.display.flip()
 
     def _get_board_start(self) -> tuple[int, int]:
@@ -94,23 +95,25 @@ class UI:
                 pygame.draw.rect(self.screen, shape.color if shape else BOARD_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE))
                 pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
 
-    def _render_piece(self):
+    def _render_tiles(self, tiles: list[tuple[int, int]], color: int):
         board_x_start, board_y_start = self._get_board_start()
 
-        for x, y in self.turn.piece.tiles():
+        for x, y in tiles:
             x_start = board_x_start + x * TILE_SIZE
             y_start = board_y_start + y * TILE_SIZE
 
-            pygame.draw.rect(self.screen, self.turn.piece.shape.color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
+            pygame.draw.rect(self.screen, color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
             pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
+
+    def _render_piece(self):
+        piece = self.turn.piece
+        self._render_tiles(piece.tiles(), piece.shape.color)
 
     def _render_ghost_piece(self):
         piece = self.turn.get_ghost()
-        board_x_start, board_y_start = self._get_board_start()
+        self._render_tiles(piece.tiles(), piece.shape.ghost_color)
 
-        for x, y in piece.tiles():
-            x_start = board_x_start + x * TILE_SIZE
-            y_start = board_y_start + y * TILE_SIZE
-
-            pygame.draw.rect(self.screen, piece.shape.ghost_color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
-            pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
+    def _render_piece_preview(self):
+        for index, shape in enumerate(self.turn.random.get_preview()):
+            tiles = [(x - 5, y + index * 4) for x, y in shape.tiles]
+            self._render_tiles(tiles, shape.color)

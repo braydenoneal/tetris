@@ -2,7 +2,7 @@ import random
 
 from board import Board, Y_TILES
 from piece import Piece
-from shape import SHAPES
+from shape import Shape, SHAPES
 
 
 class Turn:
@@ -83,14 +83,28 @@ class RandomPieceGenerator:
     def __init__(self):
         self.index = 0
         self.shapes = SHAPES.copy()
+        self.next_shapes = SHAPES.copy()
         random.shuffle(self.shapes)
+        random.shuffle(self.next_shapes)
 
     def next_piece(self) -> Piece:
         piece = Piece(self.shapes[self.index])
         self.index += 1
 
-        if self.index >= len(self.shapes):
+        if self.index >= len(SHAPES):
             self.index = 0
-            random.shuffle(self.shapes)
+            self.shapes = self.next_shapes.copy()
+            random.shuffle(self.next_shapes)
 
         return piece
+
+    def get_preview(self) -> list[Shape]:
+        shapes: list[Shape] = []
+
+        for i in range(self.index, self.index + 3):
+            if i < len(SHAPES):
+                shapes.append(self.shapes[i])
+            else:
+                shapes.append(self.next_shapes[i - len(SHAPES)])
+
+        return shapes
