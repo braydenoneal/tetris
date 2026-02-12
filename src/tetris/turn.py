@@ -10,6 +10,8 @@ class Turn:
         self.board = board
         self.random = RandomPieceGenerator()
         self.piece = self.random.next_piece()
+        self.hold_piece: Piece | None = None
+        self.can_hold = True
 
         while self.piece.shape.name == "S" or self.piece.shape.name == "Z":
             self.random = RandomPieceGenerator()
@@ -64,6 +66,8 @@ class Turn:
         return False
 
     def place_piece(self):
+        self.can_hold = True
+
         for x, y in self.piece.tiles():
             self.board.grid[x][y] = self.piece.shape
 
@@ -77,6 +81,13 @@ class Turn:
             piece.y += 1
 
         return piece
+
+    def hold(self):
+        if self.can_hold:
+            self.can_hold = False
+            next_piece = self.hold_piece if self.hold_piece else self.random.next_piece()
+            self.hold_piece = Piece(self.piece.shape)
+            self.piece = next_piece
 
 
 class RandomPieceGenerator:

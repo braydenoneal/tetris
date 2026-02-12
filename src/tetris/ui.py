@@ -61,6 +61,8 @@ class UI:
                     self.turn.piece.rotate_ccw()
             elif event.key == pygame.K_SPACE:
                 self.turn.place_now()
+            elif event.key == pygame.K_c:
+                self.turn.hold()
 
     def render(self):
         self.screen.fill(BACKGROUND_COLOR)
@@ -68,6 +70,7 @@ class UI:
         self._render_ghost_piece()
         self._render_piece()
         self._render_piece_preview()
+        self._render_hold_piece()
         pygame.display.flip()
 
     def _get_board_start(self) -> tuple[int, int]:
@@ -117,3 +120,10 @@ class UI:
         for index, shape in enumerate(self.turn.random.get_preview()):
             tiles = [(x - 5, y + index * 4) for x, y in shape.tiles]
             self._render_tiles(tiles, shape.color)
+
+    def _render_hold_piece(self):
+        piece = self.turn.hold_piece
+
+        if piece:
+            tiles = [(x + X_TILES + 1, y) for x, y in piece.shape.tiles]
+            self._render_tiles(tiles, piece.shape.color)
