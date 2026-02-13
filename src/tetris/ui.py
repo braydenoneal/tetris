@@ -59,6 +59,11 @@ class UI:
 
                 if not self.board.is_valid_piece(self.turn.piece):
                     self.turn.piece.rotate_ccw()
+            if event.key == pygame.K_z:
+                self.turn.piece.rotate_ccw()
+
+                if not self.board.is_valid_piece(self.turn.piece):
+                    self.turn.piece.rotate_cw()
             elif event.key == pygame.K_SPACE:
                 self.turn.place_now()
             elif event.key == pygame.K_c:
