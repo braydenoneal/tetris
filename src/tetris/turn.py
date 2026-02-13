@@ -40,8 +40,7 @@ class Turn:
             self.board.step()
             self.piece = self.random.next_piece()
 
-            if self.piece_should_stop(self.piece):
-                return False
+            return not self.piece_should_stop(self.piece)
 
         self.piece.y += 1
 
