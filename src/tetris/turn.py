@@ -8,13 +8,13 @@ from shape import Shape, SHAPES
 class Turn:
     def __init__(self, board: Board):
         self.board = board
-        self.random = RandomPieceGenerator()
+        self.random = RandomPieceGenerator(self.board)
         self.piece = self.random.next_piece()
         self.hold_piece: Piece | None = None
         self.can_hold = True
 
         while self.piece.shape.name == "S" or self.piece.shape.name == "Z":
-            self.random = RandomPieceGenerator()
+            self.random = RandomPieceGenerator(self.board)
             self.piece = self.random.next_piece()
 
         self.counter = 0
@@ -71,7 +71,7 @@ class Turn:
             self.board.grid[x][y] = self.piece.shape
 
     def get_ghost(self) -> Piece:
-        piece = Piece(self.piece.shape)
+        piece = Piece(self.piece.shape, self.board)
         piece.x = self.piece.x
         piece.y = self.piece.y
         piece.rotations = self.piece.rotations
@@ -85,12 +85,13 @@ class Turn:
         if self.can_hold:
             self.can_hold = False
             next_piece = self.hold_piece if self.hold_piece else self.random.next_piece()
-            self.hold_piece = Piece(self.piece.shape)
+            self.hold_piece = Piece(self.piece.shape, self.board)
             self.piece = next_piece
 
 
 class RandomPieceGenerator:
-    def __init__(self):
+    def __init__(self, board: Board):
+        self.board = board
         self.index = 0
         self.shapes = SHAPES.copy()
         self.next_shapes = SHAPES.copy()
@@ -98,7 +99,7 @@ class RandomPieceGenerator:
         random.shuffle(self.next_shapes)
 
     def next_piece(self) -> Piece:
-        piece = Piece(self.shapes[self.index])
+        piece = Piece(self.shapes[self.index], self.board)
         self.index += 1
 
         if self.index >= len(SHAPES):

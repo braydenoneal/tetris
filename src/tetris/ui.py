@@ -23,6 +23,9 @@ class UI:
 
         self.turn.delay = 2 if keys[pygame.K_DOWN] else 10
 
+        if keys[pygame.K_LEFT] and keys[pygame.K_RIGHT]:
+            return
+
         f = self.first_shift_delay
         r = self.repeat_shift_delay
 
@@ -31,9 +34,6 @@ class UI:
 
             if c == 0 or (c >= f and (c - f) % r == 0):
                 self.turn.piece.move_left()
-
-                if not self.board.is_valid_piece(self.turn.piece):
-                    self.turn.piece.move_right()
 
             self.left_counter += 1
         else:
@@ -45,9 +45,6 @@ class UI:
             if c == 0 or (c >= f and (c - f) % r == 0):
                 self.turn.piece.move_right()
 
-                if not self.board.is_valid_piece(self.turn.piece):
-                    self.turn.piece.move_left()
-
             self.right_counter += 1
         else:
             self.right_counter = 0
@@ -56,14 +53,8 @@ class UI:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 self.turn.piece.rotate_cw()
-
-                if not self.board.is_valid_piece(self.turn.piece):
-                    self.turn.piece.rotate_ccw()
             if event.key == pygame.K_z:
                 self.turn.piece.rotate_ccw()
-
-                if not self.board.is_valid_piece(self.turn.piece):
-                    self.turn.piece.rotate_cw()
             elif event.key == pygame.K_SPACE:
                 self.turn.place_now()
             elif event.key == pygame.K_c:
@@ -71,11 +62,13 @@ class UI:
 
     def render(self):
         self.screen.fill(BACKGROUND_COLOR)
+
         self._render_board()
         self._render_ghost_piece()
         self._render_piece()
         self._render_piece_preview()
         self._render_hold_piece()
+
         pygame.display.flip()
 
     def _get_board_start(self) -> tuple[int, int]:
