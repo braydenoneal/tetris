@@ -1,4 +1,3 @@
-from piece import Piece
 from shape import Shape
 
 X_TILES = 10
@@ -11,7 +10,7 @@ class Board:
     def __init__(self):
         self.grid: list[list[Shape | None]] = [[None for _ in range(Y_TILES)] for _ in range(X_TILES)]
 
-    def is_valid_piece(self, piece: Piece) -> bool:
+    def is_valid_piece(self, piece) -> bool:
         for x, y in piece.tiles():
             if x < 0 or y < 0 or x >= X_TILES or y >= Y_TILES or self.grid[x][y]:
                 return False
