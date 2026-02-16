@@ -21,7 +21,7 @@ class UI:
     def handle_keys(self):
         keys = pygame.key.get_pressed()
 
-        self.turn.delay = 2 if keys[pygame.K_DOWN] else 10
+        self.turn.delay = self.turn.fast_delay if keys[pygame.K_DOWN] else self.turn.slow_delay
 
         if keys[pygame.K_LEFT] and keys[pygame.K_RIGHT]:
             return

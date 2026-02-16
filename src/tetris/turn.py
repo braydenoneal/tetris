@@ -18,7 +18,9 @@ class Turn:
             self.piece = self.random.next_piece()
 
         self.counter = 0
-        self.delay = 10
+        self.fast_delay = 2
+        self.slow_delay = 10
+        self.delay = self.slow_delay
         self.stop_delay = False
 
     def step(self):
