@@ -1,6 +1,6 @@
 import random
 
-from board import Board, Y_TILES
+from board import Board, Y_TILES, VISIBLE_Y_TILES
 from piece import Piece
 from shape import Shape, SHAPES
 
@@ -40,7 +40,7 @@ class Turn:
             self.board.step()
             self.piece = self.random.next_piece()
 
-            return not self.piece_should_stop(self.piece)
+            return not self.spawns_overlapping(self.piece)
 
         self.piece.y += 1
 
@@ -54,21 +54,32 @@ class Turn:
         self.board.step()
         self.piece = self.random.next_piece()
 
-    def piece_should_stop(self, piece: Piece) -> bool:
+    def spawns_overlapping(self, piece: Piece) -> bool:
         for x, y in piece.tiles():
-            if y >= Y_TILES - 1:
+            if self.board.grid[x][y]:
                 return True
 
-            if self.board.grid[x][y + 1]:
+        return False
+
+    def piece_should_stop(self, piece: Piece) -> bool:
+        for x, y in piece.tiles():
+            if y >= Y_TILES - 1 or self.board.grid[x][y + 1]:
                 return True
 
         return False
 
     def place_piece(self):
         self.can_hold = True
+        all_above_playfield = True
 
         for x, y in self.piece.tiles():
             self.board.grid[x][y] = self.piece.shape
+
+            if y >= VISIBLE_Y_TILES:
+                all_above_playfield = False
+
+        if all_above_playfield:
+            exit()
 
     def get_ghost(self) -> Piece:
         piece = Piece(self.piece.shape, self.board)
