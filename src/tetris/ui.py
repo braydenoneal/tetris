@@ -34,6 +34,7 @@ class UI:
 
             if c == 0 or (c >= f and (c - f) % r == 0):
                 self.turn.piece.move_left()
+                self.turn.lock_counter = 0
 
             self.left_counter += 1
         else:
@@ -44,6 +45,7 @@ class UI:
 
             if c == 0 or (c >= f and (c - f) % r == 0):
                 self.turn.piece.move_right()
+                self.turn.lock_counter = 0
 
             self.right_counter += 1
         else:
@@ -53,8 +55,10 @@ class UI:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 self.turn.piece.rotate_cw()
+                self.turn.lock_counter = 0
             if event.key == pygame.K_z:
                 self.turn.piece.rotate_ccw()
+                self.turn.lock_counter = 0
             elif event.key == pygame.K_SPACE:
                 self.turn.place_now()
             elif event.key == pygame.K_c:

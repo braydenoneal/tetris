@@ -46,7 +46,6 @@ class Turn:
 
             return not self.spawns_overlapping(self.piece)
 
-        self.lock_counter = 0
         self.piece.y += 1
 
         return True
