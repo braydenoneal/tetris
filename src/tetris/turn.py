@@ -17,11 +17,13 @@ class Turn:
             self.random = RandomPieceGenerator(self.board)
             self.piece = self.random.next_piece()
 
-        self.counter = 0
         self.fast_delay = 2
         self.slow_delay = 10
         self.delay = self.slow_delay
-        self.stop_delay = False
+        self.counter = 0
+
+        self.lock_delay = 3
+        self.lock_counter = 0
 
     def step(self):
         self.counter += 1
@@ -32,18 +34,19 @@ class Turn:
         self.counter = 0
 
         if self.piece_should_stop(self.piece):
-            if not self.stop_delay:
-                self.stop_delay = True
-                return True
-            else:
-                self.stop_delay = False
+            self.lock_counter += 1
 
+            if self.lock_counter < self.lock_delay:
+                return True
+
+            self.lock_counter = 0
             self.place_piece()
             self.board.step()
             self.piece = self.random.next_piece()
 
             return not self.spawns_overlapping(self.piece)
 
+        self.lock_counter = 0
         self.piece.y += 1
 
         return True
