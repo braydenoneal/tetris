@@ -25,6 +25,9 @@ class Turn:
         self.lock_delay = 3
         self.lock_counter = 0
 
+        self.entry_delay = 2
+        self.entry_counter = 0
+
     def step(self):
         self.counter += 1
 
@@ -32,6 +35,10 @@ class Turn:
             return True
 
         self.counter = 0
+        self.entry_counter -= 1
+
+        if self.entry_counter > 0:
+            return True
 
         if self.piece_should_stop(self.piece):
             self.lock_counter += 1
@@ -43,6 +50,7 @@ class Turn:
             self.place_piece()
             self.board.step()
             self.piece = self.random.next_piece()
+            self.entry_counter = self.entry_delay
 
             return not self.spawns_overlapping(self.piece)
 
@@ -57,6 +65,7 @@ class Turn:
         self.place_piece()
         self.board.step()
         self.piece = self.random.next_piece()
+        self.entry_counter = self.entry_delay
 
     def spawns_overlapping(self, piece: Piece) -> bool:
         for x, y in piece.tiles():
