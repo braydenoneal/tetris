@@ -9,7 +9,7 @@ class Piece:
         self.shape = shape
         self.board = board
         self.x = X_TILES // 2 - math.ceil(shape_width(shape) / 2)
-        self.y = VISIBLE_Y_TILES
+        self.y = VISIBLE_Y_TILES - (1 if shape.name == "I" else 2)
         self.rotations = 0  # 1-3
 
     def move_left(self):
