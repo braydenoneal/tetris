@@ -1,6 +1,6 @@
 import math
 
-from board import Board, X_TILES
+from board import Board, X_TILES, VISIBLE_Y_TILES
 from shape import Shape, shape_width
 
 
@@ -9,7 +9,7 @@ class Piece:
         self.shape = shape
         self.board = board
         self.x = X_TILES // 2 - math.ceil(shape_width(shape) / 2)
-        self.y = 0
+        self.y = VISIBLE_Y_TILES
         self.rotations = 0  # 1-3
 
     def move_left(self):

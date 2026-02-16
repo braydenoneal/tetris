@@ -1,7 +1,7 @@
 import pygame
 from pygame import Surface, Event
 
-from board import Board, X_TILES, Y_TILES, BOARD_COLOR, BOARD_BORDER_COLOR
+from board import Board, X_TILES, VISIBLE_Y_TILES, BOARD_COLOR, BOARD_BORDER_COLOR
 from turn import Turn
 
 TILE_SIZE = 20
@@ -76,7 +76,7 @@ class UI:
         screen_y_center = self.screen.get_height() // 2
 
         board_x_center = X_TILES * TILE_SIZE // 2
-        board_y_center = Y_TILES * TILE_SIZE // 2
+        board_y_center = VISIBLE_Y_TILES * TILE_SIZE // 2
 
         board_x_start = screen_x_center - board_x_center
         board_y_start = screen_y_center - board_y_center
@@ -87,21 +87,21 @@ class UI:
         board_x_start, board_y_start = self._get_board_start()
 
         for x in range(X_TILES):
-            for y in range(Y_TILES):
+            for y in range(VISIBLE_Y_TILES):
                 x_start = board_x_start + x * TILE_SIZE
                 y_start = board_y_start + y * TILE_SIZE
 
-                shape = self.board.grid[x][y]
+                shape = self.board.grid[x][y + VISIBLE_Y_TILES]
 
                 pygame.draw.rect(self.screen, shape.color if shape else BOARD_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE))
                 pygame.draw.rect(self.screen, BOARD_BORDER_COLOR, (x_start, y_start, TILE_SIZE, TILE_SIZE), 1)
 
-    def _render_tiles(self, tiles: list[tuple[int, int]], color: int, border_color=BOARD_BORDER_COLOR, thickness=1):
+    def _render_tiles(self, tiles: list[tuple[int, int]], color: int, inbounds=True, border_color=BOARD_BORDER_COLOR, thickness=1):
         board_x_start, board_y_start = self._get_board_start()
 
         for x, y in tiles:
             x_start = board_x_start + x * TILE_SIZE
-            y_start = board_y_start + y * TILE_SIZE
+            y_start = board_y_start + (y - VISIBLE_Y_TILES if inbounds else y) * TILE_SIZE
 
             pygame.draw.rect(self.screen, color, (x_start, y_start, TILE_SIZE, TILE_SIZE))
             pygame.draw.rect(self.screen, border_color, (x_start, y_start, TILE_SIZE, TILE_SIZE), thickness)
@@ -112,16 +112,16 @@ class UI:
 
     def _render_ghost_piece(self):
         piece = self.turn.get_ghost()
-        self._render_tiles(piece.tiles(), BOARD_COLOR, piece.shape.color, 2)
+        self._render_tiles(piece.tiles(), BOARD_COLOR, True, piece.shape.color, 2)
 
     def _render_piece_preview(self):
         for index, shape in enumerate(self.turn.random.get_preview()):
             tiles = [(x + X_TILES + 1, y + index * 4) for x, y in shape.tiles]
-            self._render_tiles(tiles, shape.color)
+            self._render_tiles(tiles, shape.color, False)
 
     def _render_hold_piece(self):
         piece = self.turn.hold_piece
 
         if piece:
             tiles = [(x - 5, y) for x, y in piece.shape.tiles]
-            self._render_tiles(tiles, piece.shape.color)
+            self._render_tiles(tiles, piece.shape.color, False)
